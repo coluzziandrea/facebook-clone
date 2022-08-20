@@ -4,7 +4,7 @@ import { EmojiHappyIcon } from "@heroicons/react/outline";
 import { CameraIcon, VideoCameraIcon } from "@heroicons/react/solid";
 import { useRef, useState } from "react";
 import { db, storage } from "../firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { serverTimestamp, collection, addDoc, setDoc, doc } from "firebase/firestore";
 
 function InputBox() {
@@ -28,7 +28,11 @@ function InputBox() {
       timestamp: serverTimestamp(),
     }).then((document) => {
       if (imageToPost) {
-        const uploadTask = uploadBytes(ref(storage, `posts/${document.id}`), imageToPost);
+        const uploadTask = uploadString(
+          ref(storage, `posts/${document.id}`),
+          imageToPost,
+          "data_url"
+        );
 
         removeImage();
 
